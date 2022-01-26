@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 NC='\033[0m'
 Black='\033[0;30m'
