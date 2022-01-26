@@ -18,7 +18,11 @@ Light_Cyan='\033[1;36m'
 Light_Gray='\033[0;37m'
 White='\033[1;37m'
 
-DIR="$HOME/Cursus"
+if [[ -z $BOILER_PROJS_DIR ]]; then
+  DIR="$HOME/Cursus";
+else 
+  DIR=$BOILER_PROJS_DIR;
+fi
 
 create_dir() {
 	if [[ -e "$DIR/$1" ]]; then

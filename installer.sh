@@ -1,6 +1,19 @@
 #!/bin/bash
 
 BIN="$HOME/bin";
+BOILER_PROJS_DIR="";
+
+config(){
+  
+  echo -n "Absolut path to your projects directory : ";
+  read dir;
+  echo "dir : $dir";
+  if [[ ! -e $dir ]]; then
+    echo "⚠️  Directory not found !";
+  else
+    export BOILER_PROJS_DIR=$dir;
+  fi
+}
 
 install(){
   if [[ ! -e "$BIN" ]]; then
@@ -19,4 +32,5 @@ install(){
 
 }
 
+config ;
 install ;
