@@ -1,0 +1,21 @@
+CC			= cc
+FLAGS		= -Wall -Wextra -Werror
+NAME		= pipex
+SRCS		= src
+INCS		= -I includes
+LIBS		= -L libs -lft -lftprintf -lgnl
+
+all:
+	echo ""
+
+$(NAME):
+	echo ""
+
+clean:
+	rm -rf $(NAME)
+
+fclean: clean
+
+re: fclean all
+
+.PHONY: all $(NAME) clean fclean re
