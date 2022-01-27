@@ -1,7 +1,11 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 source "${0%/*}/colors.sh"
-DEFAULT_DIR="$HOME/Projects"
+if [[ -z $BOILER_PROJS_DIR ]]; then
+    DEFAULT_DIR="$HOME/Projects";
+else 
+    DEFAULT_DIR=$BOILER_PROJS_DIR;
+fi
 GITIGNORE_TEMPLATE="${0%/*}/templates/gitignore.template"
 MAKEFILE_TEMPLATE="${0%/*}/templates/makefile.template"
 GH_PROFILE="https://github.com/SsiCipher"
