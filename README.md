@@ -1,7 +1,7 @@
 # Boiler - auto-start projects
 
 a simple bash script to automate the process of starting a project by creating the initial boilerplate.
-
+> only tested with zsh on linux
 
 ## Installation
 
@@ -11,11 +11,11 @@ $> git clone https://github.com/SsiCipher/boiler.git
 ```
 
 ```bash
-$> chmod 755 installer.sh 
+$> chmod 755 install.sh 
 ```
 
 ```bash
-$> . ./installer.sh
+$> ./install.sh
 ```
 
 ## Usage
