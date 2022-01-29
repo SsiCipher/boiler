@@ -1,13 +1,37 @@
 #!/bin/bash
 
-source "${0%/*}/colors.sh"
-if [[ -z $BOILER_PROJS_DIR ]]; then
-    DEFAULT_DIR="$HOME/Projects";
-else 
-    DEFAULT_DIR=$BOILER_PROJS_DIR;
+NC='\033[0m'
+BLACK='\033[0;30m'
+DARK_GRAY='\033[1;30m'
+RED='\033[0;31m'
+LIGHT_RED='\033[1;31m'
+GREEN='\033[0;32m'
+LIGHT_GREEN='\033[1;32m'
+ORANGE='\033[0;33m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+LIGHT_BLUE='\033[1;34m'
+PURPLE='\033[0;35m'
+LIGHT_PURPLE='\033[1;35m'
+CYAN='\033[0;36m'
+LIGHT_CYAN='\033[1;36m'
+LIGHT_GRAY='\033[0;37m'
+WHITE='\033[1;37m'
+
+if [[ ! -d $BOILER_PROJS_DIR ]]; then
+	DEFAULT_DIR="$HOME/Projects";
+else
+	DEFAULT_DIR=$BOILER_PROJS_DIR;
 fi
-GITIGNORE_TEMPLATE="${0%/*}/templates/gitignore.template"
-MAKEFILE_TEMPLATE="${0%/*}/templates/makefile.template"
+
+if [[ -e $HOME/.boiler ]]; then
+	TEMPLATES_DIR="$HOME/.boiler"
+else
+	TEMPLATES_DIR="${0%/*}/templates"
+fi
+
+GITIGNORE_TEMPLATE="$TEMPLATES_DIR/gitignore.template"
+MAKEFILE_TEMPLATE="$TEMPLATES_DIR/makefile.template"
 GH_PROFILE="https://github.com/SsiCipher"
 
 create_dir() {
@@ -112,16 +136,16 @@ clone_libs() {
 
 create_main_files() {
 	if [[ ! -e "$DEFAULT_DIR/$1/includes/$1.h" ]]; then
-		echo -e "#ifndef ${1^^}_H\n# define ${1^^}\n\n$(ls $DEFAULT_DIR/$1/includes | awk '{printf("# include \"%s\"\n", $1)}')\n\n#endif" > "$DEFAULT_DIR/$1/includes/$1.h"
+		echo -e "#ifndef ${1^^}_H\n# define ${1^^}_H\n\n$(ls $DEFAULT_DIR/$1/includes | awk '{printf("# include \"%s\"\n", $1)}')\n\n#endif" > "$DEFAULT_DIR/$1/includes/$1.h"
 	fi
 
 	if [[ ! -e "$DEFAULT_DIR/$1/$1.c" ]]; then
 		echo -n -e "${YELLOW}Main source file name (${DARK_GRAY}$1.c${YELLOW}): ${NC}"
 		read name
 		if [[ -z $name ]]; then
-			echo "#include \"includes/$1.h\"" > "$DEFAULT_DIR/$1/$1.c"
+			echo "#include \"$1.h\"" > "$DEFAULT_DIR/$1/$1.c"
 		else
-			echo "#include \"includes/$1.h\"" > "$DEFAULT_DIR/$1/$name.c"
+			echo "#include \"$1.h\"" > "$DEFAULT_DIR/$1/$name.c"
 		fi
 	fi
 
@@ -134,12 +158,19 @@ create_makefile() {
 	fi
 }
 
+clean_quit() {
+	echo ""
+	rm -rf "$DEFAULT_DIR/$1"
+	exit 0
+}
+
 if [[ -z $1 ]]; then
 	echo -e "✨ ${RED}😡 Enter a project name!!!${NC}"
 else
 	echo -e "✨ ${GRAY}Creating project '$1' in $DEFAULT_DIR 🥳${NC}"
 	echo ""
 	if create_dir $1; then
+		trap 'clean_quit $1' SIGINT
 		init_repo $1
 		add_repo_files $1
 		create_folders $1
