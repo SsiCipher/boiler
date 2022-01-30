@@ -4,7 +4,7 @@ source "${0%/*}/colors.sh"
 BIN="$HOME/bin"
 
 export_default() {
-	if [[ $(grep -c $1 $HOME/.zshrc) -eq 0 ]]; then
+	if [[ $(grep -c "export $1" $HOME/.zshrc) -eq 0 ]]; then
 		echo -e "\nexport $1=\"$2\"" >> $HOME/.zshrc
 	else
 		sed -i "s&$1=\".*\"&$1=\"$2\"&" $HOME/.zshrc
@@ -14,10 +14,6 @@ export_default() {
 }
 
 config_boiler() {
-	if [[ ! -z $BOILER_PROJS_DIR ]]; then
-		return
-	fi
-
 	echo -n -e "💬 ${LIGHT_GRAY}Absolute path to your projects directory: ${NC}";
 	read DIR;
 
@@ -44,8 +40,8 @@ config_boiler() {
 
 install_boiler() {
 	if [[ ! -e "$BIN" ]]; then
-		mkdir $BIN;
-		# export_default 'PATH' "$BIN:\$PATH"
+		mkdir $BIN
+		export_default 'PATH' "$BIN:\$PATH"
 	fi
 
 	if [[ -e "$BIN/boiler" ]]; then
