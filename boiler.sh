@@ -136,7 +136,7 @@ clone_libs() {
 
 create_main_files() {
 	if [[ ! -e "$DEFAULT_DIR/$1/includes/$1.h" ]]; then
-		echo -e "#ifndef ${1^^}_H\n# define ${1^^}_H\n\n$(ls $DEFAULT_DIR/$1/includes | awk '{printf("# include \"%s\"\n", $1)}')\n\n#endif" > "$DEFAULT_DIR/$1/includes/$1.h"
+		echo -e "#ifndef $(echo $1 | awk '{print toupper($0)}')_H\n# define $(echo $1 | awk '{print toupper($0)}')_H\n\n$(ls $DEFAULT_DIR/$1/includes | awk '{printf("# include \"%s\"\n", $1)}')\n\n#endif" > "$DEFAULT_DIR/$1/includes/$1.h"
 	fi
 
 	if [[ ! -e "$DEFAULT_DIR/$1/$1.c" ]]; then
