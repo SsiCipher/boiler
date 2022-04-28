@@ -1,62 +1,61 @@
 #!/bin/bash
 
-source "${0%/*}/colors.sh"
-BIN="$HOME/bin"
+# TODO: edit env vars
+# TODO: 
 
-export_default() {
-	if [[ $(grep -c "export $1" $HOME/.zshrc) -eq 0 ]]; then
-		echo -e "\nexport $1=\"$2\"" >> $HOME/.zshrc
+source "${0%/*}/colors.sh"
+BOILER_DIR="$HOME/.boiler"
+SHELL_CONFIG=$(echo -n "$SHELL" | cut -d / -f 3)
+SHELL_CONFIG="${HOME}/.${SHELL_CONFIG}rc"
+
+export_var() {
+	if [[ $(grep -c "export $1=$2" < "$SHELL_CONFIG") -eq 0 ]]; then
+		echo -e "export $1=$2" >> "$SHELL_CONFIG"
+		echo -e "${LIGHT_GREEN}✅ Added $1 to $SHELL_CONFIG${NC}"
 	else
-		sed -i "s&$1=\".*\"&$1=\"$2\"&" $HOME/.zshrc
-		# 👇 Alternative :
-		# cat $HOME/.zshrc | sed "s&$1=\".*\"&$1=\"$DIR\"&" > $HOME/.zshrc
+		echo -e "${LIGHT_GRAY}✅ Remove $1 from $SHELL_CONFIG first${NC}"
 	fi
 }
 
 config_boiler() {
-	echo -n -e "💬 ${LIGHT_GRAY}Absolute path to your projects directory: ${NC}";
+	echo -n -e "💬 ${LIGHT_GRAY}Projects directory path: ${NC}";
 	read DIR;
 
 	if [[ ! -z $DIR ]]; then
-		if [[ ! -e $DIR ]]; then
+		if [[ ! -d $DIR ]]; then
 			echo -n -e "⛔ ${LIGHT_RED}Directory not found${NC}, Do you want us to create it [y/n]: ";
 			read -n 1 create_dir
 			echo ""
 
 			if [[ $create_dir == 'y' ]] && mkdir $DIR; then
+				export_var 'BOILER_PROJS_DIR' $DIR
 				echo -e "${GREEN}Using directory: $DIR${NC}"
-				export_default 'BOILER_PROJS_DIR' $DIR
 			else
-				echo -e "${LIGHT_BLUE}Will use default $HOME/Projects${NC}"
+				echo -e "${LIGHT_BLUE}Will use default $HOME/Desktop${NC}"
 			fi
 		else
+			export_var 'BOILER_PROJS_DIR' $DIR
 			echo -e "${GREEN}Using directory: $DIR${NC}"
-			export_default 'BOILER_PROJS_DIR' $DIR
 		fi
 	else
-		echo -e "${LIGHT_BLUE}Will use default $HOME/Projects${NC}"
+		echo -e "${LIGHT_BLUE}Will use default $HOME/Desktop${NC}"
 	fi
 }
 
 install_boiler() {
-	if [[ ! -e "$BIN" ]]; then
-		mkdir $BIN
-		export_default 'PATH' "$BIN:\$PATH"
-	fi
-
-	if [[ -e "$BIN/boiler" ]]; then
-		rm -rf $BIN/boiler;
+	if [[ -d $BOILER_DIR ]]; then
+		rm -rf $BOILER_DIR;
 		echo -e "${LIGHT_BLUE}🚮 Delete old boiler!${NC}"
 	fi
 
-	if [[ ! -e "$HOME/.boiler" ]]; then
-		mkdir $HOME/.boiler
-		cp ./templates/* $HOME/.boiler
-		echo -e "${LIGHT_GREEN}Copied templates${NC}"
+	if [[ ! -d $BOILER_DIR ]]; then
+		mkdir $BOILER_DIR
+		export_var 'PATH' '$HOME/.boiler:$PATH'
+		cp ./templates/* $BOILER_DIR
+		echo -e "${LIGHT_GREEN}📋 Copied templates to $BOILER_DIR${NC}"
+		cp ./boiler.sh $BOILER_DIR/boiler
+		chmod +x $BOILER_DIR/boiler
 	fi
-
-	chmod 755 boiler.sh
-	cp ./boiler.sh $BIN/boiler
 
 	echo -e "${LIGHT_GREEN}✅ Boiler installed successfuly!${NC}"
 }

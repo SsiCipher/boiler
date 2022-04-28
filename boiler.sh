@@ -19,7 +19,7 @@ LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 
 if [[ ! -d $BOILER_PROJS_DIR ]]; then
-	DEFAULT_DIR="$HOME/Projects";
+	DEFAULT_DIR="$HOME/Desktop";
 else
 	DEFAULT_DIR=$BOILER_PROJS_DIR;
 fi
