@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# TODO: edit env vars
-# TODO: 
-
 source "${0%/*}/colors.sh"
 BOILER_DIR="$HOME/.boiler"
 SHELL_CONFIG=$(echo -n "$SHELL" | cut -d / -f 3)
@@ -19,23 +16,23 @@ export_var() {
 
 config_boiler() {
 	echo -n -e "💬 ${LIGHT_GRAY}Projects directory path: ${NC}";
-	read DIR;
+	read -p "$HOME/" DIR;
 
 	if [[ ! -z $DIR ]]; then
-		if [[ ! -d $DIR ]]; then
+		if [[ ! -d "$HOME/$DIR" ]]; then
 			echo -n -e "⛔ ${LIGHT_RED}Directory not found${NC}, Do you want us to create it [y/n]: ";
 			read -n 1 create_dir
 			echo ""
 
-			if [[ $create_dir == 'y' ]] && mkdir $DIR; then
-				export_var 'BOILER_PROJS_DIR' $DIR
-				echo -e "${GREEN}Using directory: $DIR${NC}"
+			if [[ $create_dir == 'y' ]] && mkdir "$HOME/$DIR"; then
+				export_var 'BOILER_PROJS_DIR' "$HOME/$DIR"
+				echo -e "${GREEN}Using directory: "$HOME/$DIR"${NC}"
 			else
 				echo -e "${LIGHT_BLUE}Will use default $HOME/Desktop${NC}"
 			fi
 		else
-			export_var 'BOILER_PROJS_DIR' $DIR
-			echo -e "${GREEN}Using directory: $DIR${NC}"
+			export_var 'BOILER_PROJS_DIR' "$HOME/$DIR"
+			echo -e "${GREEN}Using directory: "$HOME/$DIR"${NC}"
 		fi
 	else
 		echo -e "${LIGHT_BLUE}Will use default $HOME/Desktop${NC}"

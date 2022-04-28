@@ -164,6 +164,9 @@ clean_quit() {
 	exit 0
 }
 
+SHELL_CONFIG=$(echo -n "$SHELL" | cut -d / -f 3)
+SHELL_CONFIG="${HOME}/.${SHELL_CONFIG}rc"
+
 if [[ -z $1 ]]; then
 	echo -e "✨ ${RED}😡 Enter a project name!!!${NC}"
 else
