@@ -25,13 +25,13 @@ config_boiler() {
 			echo ""
 
 			if [[ $create_dir == 'y' ]] && mkdir "$HOME/$DIR"; then
-				export_var 'BOILER_PROJS_DIR' "$HOME/$DIR"
+				export_var 'BOILER_PROJS_DIR' "\$HOME/$DIR"
 				echo -e "${GREEN}Using directory: "$HOME/$DIR"${NC}"
 			else
 				echo -e "${LIGHT_BLUE}Will use default $HOME/Desktop${NC}"
 			fi
 		else
-			export_var 'BOILER_PROJS_DIR' "$HOME/$DIR"
+			export_var 'BOILER_PROJS_DIR' "\$HOME/$DIR"
 			echo -e "${GREEN}Using directory: "$HOME/$DIR"${NC}"
 		fi
 	else

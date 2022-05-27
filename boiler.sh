@@ -164,11 +164,25 @@ clean_quit() {
 	exit 0
 }
 
-SHELL_CONFIG=$(echo -n "$SHELL" | cut -d / -f 3)
+SHELL_CONFIG=$(echo -n "$SHELL" | awk -F '/' '{print $NF}')
 SHELL_CONFIG="${HOME}/.${SHELL_CONFIG}rc"
 
 if [[ -z $1 ]]; then
 	echo -e "✨ ${RED}😡 Enter a project name!!!${NC}"
+elif [[ $1 == "--uninstall" ]]; then
+	echo -n -e "❔ Are you sure you want to uninstall ${ORANGE}BOILER${NC} 😟? [y/n]: "
+	read -n 1 uninstall
+	echo ""
+	if [[ $uninstall == 'y' ]]; then
+		rm -rf "$HOME/.boiler"
+		echo -e "✅ ${LIGHT_GREEN}Deleted $HOME/.boiler${NC}"
+		sed -i '/export BOILER_PROJS_DIR=\$HOME\/.*/d' $SHELL_CONFIG
+		sed -i '/export PATH=$HOME\/.boiler:$PATH/d' $SHELL_CONFIG
+		echo -e "✅ ${LIGHT_GREEN}Removed all exports from $SHELL_CONFIG${NC}"
+		echo -e "😥 ${GREEN}Boiler has been uninstalled successfully, Goodbye !${NC}"
+	else
+		echo -e "✅ ${LIGHT_BLUE}Phew Thought you didn't like Boiler${NC}"
+	fi
 else
 	echo -e "✨ ${GRAY}Creating project '$1' in $DEFAULT_DIR 🥳${NC}"
 	echo ""
