@@ -59,4 +59,11 @@ install_boiler() {
 
 config_boiler
 install_boiler
-zsh
+
+if [[ $SHELL_CONFIG == "${HOME}/.zshrc" ]]; then
+	zsh
+elif [[ $SHELL_CONFIG == "${HOME}/.bashrc" ]]; then
+	bash
+else
+	echo -e "${LIGHT_GREEN}🐨 You will have to reload your shell to use boiler${NC}"
+fi
