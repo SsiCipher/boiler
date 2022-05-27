@@ -2,7 +2,7 @@
 
 source "${0%/*}/colors.sh"
 BOILER_DIR="$HOME/.boiler"
-SHELL_CONFIG=$(echo -n "$SHELL" | cut -d / -f 3)
+SHELL_CONFIG=$(echo -n "$SHELL" | awk -F '/' '{print $NF}')
 SHELL_CONFIG="${HOME}/.${SHELL_CONFIG}rc"
 
 export_var() {
