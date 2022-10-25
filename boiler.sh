@@ -18,18 +18,11 @@ LIGHT_CYAN='\033[1;36m'
 LIGHT_GRAY='\033[0;37m'
 WHITE='\033[1;37m'
 
-if [[ ! -d $BOILER_PROJS_DIR ]]; then
-	DEFAULT_DIR="$HOME/Desktop";
-else
-	DEFAULT_DIR=$BOILER_PROJS_DIR;
-fi
-
-if [[ -e $HOME/.boiler ]]; then
-	TEMPLATES_DIR="$HOME/.boiler"
-else
-	TEMPLATES_DIR="${0%/*}/templates"
-fi
-
+# Default working directory
+if [[ ! -d $BOILER_PROJS_DIR ]]; then DEFAULT_DIR="$HOME/Desktop"; else DEFAULT_DIR=$BOILER_PROJS_DIR; fi
+# Template directory
+if [[ -e $HOME/.boiler ]]; then TEMPLATES_DIR="$HOME/.boiler" else TEMPLATES_DIR="${0%/*}/templates" fi
+# Other variables
 GITIGNORE_TEMPLATE="$TEMPLATES_DIR/gitignore.template"
 MAKEFILE_TEMPLATE="$TEMPLATES_DIR/makefile.template"
 GH_PROFILE="https://github.com/SsiCipher"
